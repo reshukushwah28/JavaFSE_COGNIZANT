@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http:
+       xmlns:xsi="http:
+       xmlns:context="http:
+       xsi:schemaLocation="
+           http:
+           http:
+           http:
+           http:
+
+    <!-- 
+       Enable Component Scanning:
+       Spring will scan com.library package for classes annotated with
+       @Component, @Repository, @Service, or @Controller and register them as beans.
+       XML bean definitions are no longer needed.
+    -->
+    <context:component-scan base-package="com.library" />
+
+</beans>
+

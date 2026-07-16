@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http:
+       xmlns:xsi="http:
+       xsi:schemaLocation="http:
+                           http:
+
+    
+    <bean id="bookRepository" class="com.library.repository.BookRepository" />
+
+    
+    <bean id="bookService" class="com.library.service.BookService">
+        <property name="bookRepository" ref="bookRepository" />
+    </bean>
+
+</beans>
+
