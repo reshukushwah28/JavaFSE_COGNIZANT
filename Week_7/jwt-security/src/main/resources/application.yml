@@ -1,0 +1,4 @@
+spring:
+  security:
+    jwt:
+      secret: YOUR_SECRET_KEY
