@@ -9,6 +9,6 @@
     <span *ngSwitchCase="'pending'" class="badge badge-secondary">Pending</span>
   </ng-container>
 
-  <button (click)="enrollRequested.emit(course.id)">Enroll</button>
+  <button (click)="onEnrollClick()">{{ isEnrolled ? 'Unenroll' : 'Enroll' }}</button>
   <button (click)="isExpanded = !isExpanded">Show Details</button>
 </div>

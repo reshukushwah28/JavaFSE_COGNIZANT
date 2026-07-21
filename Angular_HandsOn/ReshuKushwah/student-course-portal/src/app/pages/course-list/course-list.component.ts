@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseCardComponent } from '../../components/course-card/course-card.component';
+import { CourseService } from '../../services/course.service';
+import { Course } from '../../models/course.model';
 
 @Component({
   selector: 'app-course-list',
@@ -11,18 +13,14 @@ import { CourseCardComponent } from '../../components/course-card/course-card.co
 })
 export class CourseListComponent implements OnInit {
   isLoading = true;
-  courses: any[] = [];
+  courses: Course[] = [];
   selectedCourseId: number | null = null;
+
+  constructor(private courseService: CourseService) {}
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.courses = [
-        { id: 1, name: 'Angular Basics', code: 'CS101', credits: 3, gradeStatus: 'passed' },
-        { id: 2, name: 'Advanced RxJS', code: 'CS102', credits: 4, gradeStatus: 'failed' },
-        { id: 3, name: 'NgRx State Management', code: 'CS103', credits: 4, gradeStatus: 'pending' },
-        { id: 4, name: 'Web Components', code: 'CS104', credits: 2, gradeStatus: 'passed' },
-        { id: 5, name: 'Testing in Angular', code: 'CS105', credits: 3, gradeStatus: 'pending' }
-      ];
+      this.courses = this.courseService.getCourses();
       this.isLoading = false;
     }, 1500);
   }
