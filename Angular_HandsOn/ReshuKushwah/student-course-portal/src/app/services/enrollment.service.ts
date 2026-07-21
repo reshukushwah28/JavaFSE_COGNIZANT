@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { CourseService } from './course.service';
 import { Course } from '../models/course.model';
 
@@ -25,8 +26,12 @@ export class EnrollmentService {
   }
 
   getEnrolledCourses(): Course[] {
-    return this.enrolledCourseIds
-      .map(id => this.courseService.getCourseById(id))
-      .filter((course): course is Course => course !== undefined);
+    // Placeholder logic since getCourseById now returns Observable
+    return [];
+  }
+
+  getStudentsByCourse(courseId: number): Observable<any[]> {
+    // Mocking an HTTP call to get students
+    return of([{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]);
   }
 }
