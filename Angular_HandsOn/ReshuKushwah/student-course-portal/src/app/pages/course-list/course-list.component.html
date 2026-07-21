@@ -1,13 +1,23 @@
 <div class="course-list-container">
   <h2>Available Courses</h2>
   
-  <div class="courses-grid">
-    <app-course-card 
-      *ngFor="let c of courses" 
-      [course]="c" 
-      (enrollRequested)="onEnroll($event)">
-    </app-course-card>
-  </div>
+  <p *ngIf="isLoading; else coursesTemplate">Loading courses...</p>
+
+  <ng-template #coursesTemplate>
+    <ng-container *ngIf="courses.length > 0; else noCourses">
+      <div class="courses-grid">
+        <app-course-card 
+          *ngFor="let c of courses; trackBy: trackByCourseId" 
+          [course]="c" 
+          (enrollRequested)="onEnroll($event)">
+        </app-course-card>
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #noCourses>
+    <p>No courses available.</p>
+  </ng-template>
 
   <p *ngIf="selectedCourseId">Selected course ID: {{ selectedCourseId }}</p>
 </div>
