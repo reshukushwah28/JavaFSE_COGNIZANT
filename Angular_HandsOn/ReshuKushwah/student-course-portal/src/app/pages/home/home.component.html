@@ -3,7 +3,7 @@
   <p>Manage your courses, view your profile, and enroll in new classes.</p>
   
   <div class="search-section">
-    <input [(ngModel)]="searchTerm" placeholder="Search..." />
+    <input [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Search..." />
     <p>Searching for: {{ searchTerm }}</p>
   </div>
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CourseCardComponent } from '../../components/course-card/course-card.component';
 import { CourseService } from '../../services/course.service';
@@ -16,9 +17,14 @@ export class CourseListComponent implements OnInit {
   courses: Course[] = [];
   selectedCourseId: number | null = null;
 
-  constructor(private courseService: CourseService) {}
+  constructor(private courseService: CourseService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
+    const searchParam = this.route.snapshot.queryParamMap.get('search');
+    if (searchParam) {
+      console.log('Search parameter found:', searchParam);
+    }
+
     setTimeout(() => {
       this.courses = this.courseService.getCourses();
       this.isLoading = false;
@@ -28,6 +34,10 @@ export class CourseListComponent implements OnInit {
   onEnroll(courseId: number): void {
     console.log('Enrolling in course: ' + courseId);
     this.selectedCourseId = courseId;
+  }
+
+  goToCourseDetails(courseId: number): void {
+    this.router.navigate(['courses', courseId]);
   }
 
   // trackBy improves performance by helping Angular identify which items have changed,

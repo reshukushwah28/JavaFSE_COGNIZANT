@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CourseService } from '../../services/course.service';
@@ -25,7 +26,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   coursesCount = 0;
 
-  constructor(private courseService: CourseService) {}
+  constructor(private courseService: CourseService, private router: Router) {}
+
+  onSearchChange(): void {
+    if (this.searchTerm) {
+      this.router.navigate(['/courses'], { queryParams: { search: this.searchTerm } });
+    }
+  }
 
   ngOnInit(): void {
     console.log('HomeComponent initialised — courses loaded');

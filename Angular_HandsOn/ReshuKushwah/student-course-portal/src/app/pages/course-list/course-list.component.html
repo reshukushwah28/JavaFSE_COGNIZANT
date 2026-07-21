@@ -9,6 +9,7 @@
         <app-course-card 
           *ngFor="let c of courses; trackBy: trackByCourseId" 
           [course]="c" 
+          (click)="goToCourseDetails(c.id)"
           (enrollRequested)="onEnroll($event)">
         </app-course-card>
       </div>
