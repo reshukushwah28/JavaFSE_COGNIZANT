@@ -1,10 +1,11 @@
 <div class="course-list-container">
   <h2>Available Courses</h2>
   
-  <p *ngIf="isLoading; else coursesTemplate">Loading courses...</p>
+  <div *ngIf="isLoading$ | async">Loading courses via NgRx...</div>
+  <div *ngIf="error$ | async as errorMessage" class="error-msg">{{ errorMessage }}</div>
 
-  <ng-template #coursesTemplate>
-    <ng-container *ngIf="courses.length > 0; else noCourses">
+  <ng-container *ngIf="!(isLoading$ | async) && !(error$ | async)">
+    <div *ngIf="(courses$ | async) as courses">
       <div class="courses-grid">
         <app-course-card 
           *ngFor="let c of courses; trackBy: trackByCourseId" 
@@ -13,12 +14,8 @@
           (enrollRequested)="onEnroll($event)">
         </app-course-card>
       </div>
-    </ng-container>
-  </ng-template>
+    </div>
+  </ng-container>
 
-  <ng-template #noCourses>
-    <p>No courses available.</p>
-  </ng-template>
-
-  <p *ngIf="selectedCourseId">Selected course ID: {{ selectedCourseId }}</p>
+  <p *ngIf="selectedCourseId">You have selected course {{ selectedCourseId }} for details.</p>
 </div>

@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CourseCardComponent } from '../../components/course-card/course-card.component';
-import { CourseService } from '../../services/course.service';
 import { EnrollmentService } from '../../services/enrollment.service';
 import { Course } from '../../models/course.model';
 import { switchMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectCourses, selectCoursesLoading, selectCoursesError } from '../../store/selectors/course.selectors';
+import { loadCourses } from '../../store/actions/course.actions';
 
 @Component({
   selector: 'app-course-list',
@@ -16,40 +18,34 @@ import { of } from 'rxjs';
   styleUrl: './course-list.component.css'
 })
 export class CourseListComponent implements OnInit {
-  isLoading = true;
-  courses: Course[] = [];
+  courses$: Observable<Course[]>;
+  isLoading$: Observable<boolean>;
+  error$: Observable<string | null>;
   selectedCourseId: number | null = null;
-  errorMessage = '';
 
   constructor(
-    private courseService: CourseService, 
     private route: ActivatedRoute, 
     private router: Router,
-    private enrollmentService: EnrollmentService
-  ) {}
+    private enrollmentService: EnrollmentService,
+    private store: Store
+  ) {
+    this.courses$ = this.store.select(selectCourses);
+    this.isLoading$ = this.store.select(selectCoursesLoading);
+    this.error$ = this.store.select(selectCoursesError);
+  }
 
   ngOnInit(): void {
     const searchParam = this.route.snapshot.queryParamMap.get('search');
     if (searchParam) {
       console.log('Search parameter found:', searchParam);
     }
-
-    this.courseService.getCourses().subscribe({ 
-      next: courses => this.courses = courses, 
-      error: err => {
-        this.errorMessage = err.message;
-        this.isLoading = false;
-      },
-      complete: () => this.isLoading = false 
-    });
+    this.store.dispatch(loadCourses());
   }
 
   onEnroll(courseId: number): void {
     console.log('Enrolling in course: ' + courseId);
     this.selectedCourseId = courseId;
-
-    // switchMap cancels the previous inner Observable when a new courseId arrives.
-    // This is useful here to avoid race conditions if the user selects multiple courses quickly.
+    
     of(courseId).pipe(
       switchMap(id => this.enrollmentService.getStudentsByCourse(id)),
       catchError(err => {
